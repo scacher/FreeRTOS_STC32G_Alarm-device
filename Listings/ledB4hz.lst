@@ -1,0 +1,61 @@
+C251 COMPILER V5.60.0,  ledB4hz                                                            04/07/23  13:15:12  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE ledB4hz
+OBJECT MODULE PLACED IN .\Objects\ledB4hz.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE Sources\Task\src\ledB4hz.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEE
+                    -D) BROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K1
+                    -28;.\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\ledB4hz.lst) TABS(2) OBJECT(.\Objects\ledB4hz.obj) 
+
+stmt  level    source
+
+    1          #include "FreeRTOS.h"
+    2          #include "task.h"
+    3          
+    4          #include "ledB4hz.h"
+    5          
+    6          void ledB4hz();
+    7          
+    8          portTASK_FUNCTION( vLEDB4hzTask, pvParameters)
+    9          {
+   10   1        UNUSED( pvParameters );
+   11   1      
+   12   1          while(1)
+   13   1          {
+   14   2            vTaskDelay(5);
+   15   2          }
+   16   1          vTaskDelete(NULL);
+   17   1      }
+   18          
+   19          void ledB4hz()
+   20          {
+   21   1        //const TickType_t xDelay125ms = pdMS_TO_TICKS( 125UL );
+   22   1        P47=0;
+   23   1        vTaskDelay(125);
+   24   1        P47=1;
+   25   1        vTaskDelay(125);
+   26   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =        28     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

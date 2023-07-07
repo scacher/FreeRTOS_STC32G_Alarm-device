@@ -1,0 +1,123 @@
+C251 COMPILER V5.60.0,  uart3                                                              04/07/23  12:54:13  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE uart3
+OBJECT MODULE PLACED IN .\Objects\uart3.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE Sources\Task\src\uart3.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEED)
+                    - BROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K128
+                    -;.\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\uart3.lst) TABS(2) OBJECT(.\Objects\uart3.obj) 
+
+stmt  level    source
+
+    1          /*---------------------------------------------------------------------*/
+    2          /* --- STC MCU Limited ------------------------------------------------*/
+    3          /* --- STC 1T Series MCU Demo Programme -------------------------------*/
+    4          /* --- Mobile: (86)13922805190 ----------------------------------------*/
+    5          /* --- Fax: 86-0513-55012956,55012947,55012969 ------------------------*/
+    6          /* --- Tel: 86-0513-55012928,55012929,55012966 ------------------------*/
+    7          /* --- Web: www.STCMCU.com --------------------------------------------*/
+    8          /* --- Web: www.STCMCUDATA.com  ---------------------------------------*/
+    9          /* --- QQ:  800003751 -------------------------------------------------*/
+   10          /* 如果要在程序中使用此代码,请在程序中注明使用了STC的资料及程序            */
+   11          /*---------------------------------------------------------------------*/
+   12          
+   13          
+   14          /*************  功能说明    **************
+   15          
+   16          本例程基于STC32G为主控芯片的实验箱9进行编写测试.
+   17          
+   18          短接实验箱上的J7、J8跳线进行测试.
+   19          
+   20          串口3定时发送一串数据给串口2.
+   21          
+   22          串口2输出从串口3接收到的数据.
+   23          
+   24          往串口2发送数据，MCU收到后从串口2原样输出.
+   25          
+   26          ******************************************/
+   27          
+   28          #include "FreeRTOS.h"
+   29          #include "task.h"
+   30          
+   31          #include "STC32G_UART.h"
+   32          #include "STC32G_GPIO.h"
+   33          #include "display.h"
+   34          #include "uart3.h"
+   35          
+   36          extern void TX3_write2buff(uint8_t dat);
+   37          void uart3_gpio_config(void);
+   38          
+   39          uint16_t Sec_Cnt;    //1秒计数
+   40          
+   41          /* UART任务函数 */
+   42          portTASK_FUNCTION( vUart3Task, pvParameters )
+   43          {
+   44   1          uint8_t i;
+   45   1          uint8_t temp;
+   46   1          uart3_gpio_config();
+   47   1      //    Sec_Cnt = 0;
+   48   1      
+   49   1      //    PrintString3("STC32G UART3 Test Programme!\r\n");  //UART2发送一个字符串
+   50   1          //PrintString3("STC32G UART3-UART2 Test Programme!\r\n");  //UART3发送一个字符串
+   51   1          while(1)
+   52   1          {
+   53   2      //        Sec_Cnt++;
+   54   2      //        if(Sec_Cnt >= (uint16_t)pvParameters)
+   55   2      //        {
+   56   2      //            Sec_Cnt = 0;
+   57   2      //            PrintString3("STC32G UART3 Test Programme!\r\n");  //UART3发送一个字符串
+C251 COMPILER V5.60.0,  uart3                                                              04/07/23  12:54:13  PAGE 2   
+
+   58   2      //        }
+   59   2      //        PrintString3("STC32G UART3 Test Programme!\r\n");
+   60   2              if(COM3.RX_TimeOut > 0)
+   61   2              {
+   62   3                  if(--COM3.RX_TimeOut == 0)
+   63   3                  {
+   64   4                      if(COM3.RX_Cnt > 0)
+   65   4                      {
+   66   5                          for(i=0; i<COM3.RX_Cnt; i++);    
+   67   5                              //TX3_write2buff(RX3_Buffer[1]);    //把收到的数据通过串口2输出
+   68   5                          temp=RX3_Buffer[63];
+   69   5                          COM3.RX_Cnt = 0;   //清除字节数
+   70   5                          pucLEDBuffer[1]=temp/100;
+   71   5                          pucLEDBuffer[2]=temp%100/10;
+   72   5                          pucLEDBuffer[3]=temp%100%10;
+   73   5                      }
+   74   4                  }
+   75   3              }
+   76   2              
+   77   2              vTaskDelay(1);
+   78   2          }
+   79   1          vTaskDelete(NULL);
+   80   1      }   
+*** WARNING C47 IN LINE 42 OF Sources\Task\src\uart3.c: 'pvParameters': unreferenced parameter
+   81          void uart3_gpio_config(void)
+   82          {
+   83   1        P5_MODE_IN_HIZ(GPIO_Pin_0);
+   84   1        P5_MODE_IN_HIZ(GPIO_Pin_1);
+   85   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       115     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =         2     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,1 @@
+"Sources\Driver\isr\STC32G_Timer_Isr.c" XSMALL FUNCTIONS (REENTRANT) OPTIMIZE (4,SPEED) BROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K128;.\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\STC32G_Timer_Isr.lst) TABS (2) OBJECT(.\Objects\STC32G_Timer_Isr.obj)

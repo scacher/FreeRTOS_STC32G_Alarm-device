@@ -1,0 +1,156 @@
+C251 COMPILER V5.60.0,  main                                                               07/07/23  15:34:16  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE Sources\User\main.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEED) BROW
+                    -SE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K128;.\So
+                    -urces\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj) 
+
+stmt  level    source
+
+    1          
+    2          /*
+    3           * FreeRTOS STC port V1.0.2
+    4           * 
+    5           * STC32G12K128¹¦ÄÜ¼ò½é£º
+    6           *    2×é CAN, 3×éLin, USB, 32Î» 8051, RMB5,
+    7           *    ¸ß¾«×¼12Î»ADC, DMA Ö§³Ö(TFT²ÊÆÁ, ADC, 4×é´®¿Ú, SPI, I2C )
+    8           *  
+    9           *  ¸÷Î»ÓÃ»§ÔÚºóÐøµÄÊ¹ÓÃ¹ý³ÌÖÐ£¬Èç¹û·¢ÏÖÓÐ²»ÕýÈ·µÄµØ·½»òÕß
+   10           *  ÓÐ¿É¸ÄÉÆµÄµØ·½£¬ÇëºÍSTCÁªÏµ£¬ÓÉSTC¹Ù·½½øÐÐÍ³Ò»ÐÞ¸Ä²¢¸üÐÂ°æ±¾
+   11           *
+   12           *  ÈôÄúµÄ´úÂë»òÎÄÕÂÖÐÐèÒªÒýÓÃ±¾³ÌÐò°üÖÐµÄ²¿·ÖÒÆÖ²´úÂë£¬ÇëÔÚÄúµÄ
+   13           *  ´úÂë»òÎÄÕÂÖÐ×¢Ã÷²Î¿¼»òÊ¹ÓÃÁËSTCµÄFreeRTOSµÄÒÆÖ²´úÂë
+   14          */
+   15          
+   16          #include "FreeRTOS.h"
+   17          #include "task.h"
+   18          #include "System_init.h"
+   19          
+   20          #include "display.h"
+   21          //#include "rtc.h"
+   22          #include "led.h"
+   23          #include "adckey.h"
+   24          #include "DS18B20.h"
+   25          //#include "uart3.h"
+   26          #include "Power_detection.h"
+   27          #include "Infrared.h"
+   28          #include "general.h"
+   29          #include "oled.h"
+   30          #include "beep.h"
+   31          
+   32          
+   33          void vSystemInit( void );
+   34          
+   35          void main( void )
+   36          {
+   37   1          /* ÏµÍ³³õÊ¼»¯ */
+   38   1          vSystemInit();
+   39   1      
+   40   1        /* ´´½¨ÈÎÎñ */
+   41   1      
+   42   1          xTaskCreate((TaskFunction_t )vDisplayTask,
+   43   1                      (const char*    )"DISPLAY",
+   44   1                      (uint16_t       )configDEFAULT_STACK_SIZE/2,
+   45   1                      (void*          )NULL,
+   46   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES+1),
+   47   1                      (TaskHandle_t*  )NULL);
+   48   1      
+   49   1          xTaskCreate((TaskFunction_t )vOLEDTask,
+   50   1                      (const char*    )"OLED",
+   51   1                      (uint16_t       )configDEFAULT_STACK_SIZE,
+   52   1                      (void*          )NULL,
+   53   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   54   1                      (TaskHandle_t*  )NULL);
+   55   1                      
+   56   1          xTaskCreate((TaskFunction_t )vDS18B20Task,
+   57   1                      (const char*    )"DS18B20",
+C251 COMPILER V5.60.0,  main                                                               07/07/23  15:34:16  PAGE 2   
+
+   58   1                      (uint16_t       )configDEFAULT_STACK_SIZE,
+   59   1                      (void*          )NULL,
+   60   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   61   1                      (TaskHandle_t*  )NULL);
+   62   1                      
+   63   1          xTaskCreate((TaskFunction_t )vLEDTask,
+   64   1                      (const char*    )"LED",
+   65   1                      (uint16_t       )configDEFAULT_STACK_SIZE/2 ,
+   66   1                      (void*          )NULL,
+   67   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   68   1                      (TaskHandle_t*  )NULL);
+   69   1                      
+   70   1          xTaskCreate((TaskFunction_t )vAdcKeyTask,
+   71   1                      (const char*    )"ADCKEY",
+   72   1                      (uint16_t       )configDEFAULT_STACK_SIZE,
+   73   1                      (void*          )NULL,
+   74   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   75   1                      (TaskHandle_t*  )NULL);
+   76   1                      
+   77   1          xTaskCreate((TaskFunction_t )vPowerTask,
+   78   1                      (const char*    )"Power_detection",
+   79   1                      (uint16_t       )configDEFAULT_STACK_SIZE/2,
+   80   1                      (void*          )NULL,
+   81   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   82   1                      (TaskHandle_t*  )NULL);
+   83   1                      
+   84   1          xTaskCreate((TaskFunction_t )vInfraredTask,
+   85   1                      (const char*    )"Infrared",
+   86   1                      (uint16_t       )configDEFAULT_STACK_SIZE/2,
+   87   1                      (void*          )NULL,
+   88   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   89   1                      (TaskHandle_t*  )NULL);
+   90   1                      
+   91   1          xTaskCreate((TaskFunction_t )vPWMA_beepTask,
+   92   1                      (const char*    )"PWMA_beep",
+   93   1                      (uint16_t       )configDEFAULT_STACK_SIZE/2,
+   94   1                      (void*          )NULL,
+   95   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+   96   1                      (TaskHandle_t*  )NULL);
+   97   1                                  
+   98   1          xTaskCreate((TaskFunction_t )vgeneralTask,
+   99   1                      (const char*    )"general",
+  100   1                      (uint16_t       )configDEFAULT_STACK_SIZE,
+  101   1                      (void*          )NULL,
+  102   1                      (UBaseType_t    )(configDEFAULT_PRIORITIES),
+  103   1                      (TaskHandle_t*  )NULL);
+  104   1                      
+  105   1      //    xTaskCreate((TaskFunction_t )vUart3Task,
+  106   1      //                (const char*    )"UART3",
+  107   1      //                (uint16_t       )configDEFAULT_STACK_SIZE,
+  108   1      //                (void*          )1000,  //×¢ÒâpvParameters²ÎÊý´«µØÖ·»òÕßÁ¢¼´ÊýÊ±Ö»ÓÐµÍ24Î»ÊÇÓÐÐ§Î»£¬×î¸
+             -ß8Î»±àÒëÊ±»á×Ô¶¯Ìî0. ¿ÉÍ¨¹ý±äÁ¿»òÕß³£Á¿´«ËÍ32×Ö½ÚÊý¾Ý.
+  109   1      //                (UBaseType_t    )(configDEFAULT_PRIORITIES),
+  110   1      //                (TaskHandle_t*  )NULL);
+  111   1          /* Æô¶¯ÈÎÎñµ÷¶ÈÆ÷¿ªÊ¼ÈÎÎñµ÷¶È */
+  112   1          vTaskStartScheduler();
+  113   1      
+  114   1          /* Õý³£Çé¿öÏÂ²»»áÔËÐÐµ½´Ë´¦ */
+  115   1          while (1);
+  116   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       287     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+C251 COMPILER V5.60.0,  main                                                               07/07/23  15:34:16  PAGE 3   
+
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        75     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,68 @@
+C251 COMPILER V5.60.0,  Infrared                                                           04/07/23  12:54:12  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE Infrared
+OBJECT MODULE PLACED IN .\Objects\Infrared.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE Sources\Task\src\Infrared.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPE
+                    -ED) BROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K
+                    -128;.\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\Infrared.lst) TABS(2) OBJECT(.\Objects\Infrared.obj)
+                    - 
+
+stmt  level    source
+
+    1          #include "FreeRTOS.h"
+    2          #include "task.h"
+    3          #include "STC32G_ADC.h"
+    4          
+    5          #include "Infrared.h"
+    6          
+    7          uint8_t flag1;
+    8          
+    9          void prvInfraredInit();
+   10          
+   11          portTASK_FUNCTION( vInfraredTask, pvParameters )
+   12          {
+   13   1        //const TickType_t xDelay10ms = pdMS_TO_TICKS( 10UL );  
+   14   1        UNUSED( pvParameters );
+   15   1      
+   16   1          prvInfraredInit();
+   17   1          while(1)
+   18   1          {
+   19   2              if(P43==1)
+   20   2                flag1=1;
+   21   2              else
+   22   2                flag1=0;
+   23   2              vTaskDelay(10);
+   24   2          }
+   25   1          
+   26   1          vTaskDelete(NULL);
+   27   1      }
+   28          
+   29          void prvInfraredInit()
+   30          {
+   31   1          P43=0;
+   32   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =        35     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =         1     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,1 @@
+"Sources\Task\src\ledB4hz.c" XSMALL FUNCTIONS (REENTRANT) OPTIMIZE (4,SPEED) BROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K128;.\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\ledB4hz.lst) TABS (2) OBJECT(.\Objects\ledB4hz.obj)

@@ -1,0 +1,104 @@
+C251 COMPILER V5.60.0,  led                                                                04/07/23  13:15:26  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE led
+OBJECT MODULE PLACED IN .\Objects\led.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE Sources\Task\src\led.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEED) B
+                    -ROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K128;.
+                    -\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\led.lst) TABS(2) OBJECT(.\Objects\led.obj) 
+
+stmt  level    source
+
+    1          #include "FreeRTOS.h"
+    2          #include "task.h"
+    3          
+    4          #include "adckey.h"
+    5          #include "led.h"
+    6          #include "display.h"
+    7          #include "Power_detection.h"
+    8          
+    9          void ledA1hz();
+   10          //void ledB4hz();
+   11          //void ledC4hz();
+   12          void prvLEDInit();
+   13          
+   14          
+   15          portTASK_FUNCTION( vLEDTask, pvParameters)
+   16          {
+   17   1        UNUSED( pvParameters );
+   18   1          
+   19   1          prvLEDInit();
+   20   1          while(1)
+   21   1          {
+   22   2            vTaskDelay(5);
+   23   2          }
+   24   1          vTaskDelete(NULL);
+   25   1      }
+   26          
+   27          void prvLEDInit()
+   28          {
+   29   1        P40=0;
+   30   1        P44=0;
+   31   1      }
+   32          
+   33          void ledA1hz()
+   34          {
+   35   1        //const TickType_t xDelay500ms = pdMS_TO_TICKS( 500UL );
+   36   1        P46=0;
+   37   1        vTaskDelay(500);
+   38   1        P46=1;
+   39   1        vTaskDelay(500);
+   40   1      }
+   41          
+   42          void ledB4hz()
+   43          {
+   44   1        //const TickType_t xDelay125ms = pdMS_TO_TICKS( 125UL );
+   45   1        P47=0;
+   46   1        vTaskDelay(125);
+   47   1        P47=1;
+   48   1        vTaskDelay(125);
+   49   1      }
+   50          
+   51          
+   52          void ledC4hz()
+   53          {
+   54   1        //const TickType_t xDelay125ms = pdMS_TO_TICKS( 125UL );
+   55   1        P44=0;
+   56   1        vTaskDelay(125);
+   57   1        P44=1;
+C251 COMPILER V5.60.0,  led                                                                04/07/23  13:15:26  PAGE 2   
+
+   58   1        vTaskDelay(125);
+   59   1      }
+   60          
+   61          void ledB4C4hz()
+   62          {
+   63   1        P47=0;P44=1;
+   64   1        vTaskDelay(125);
+   65   1        P47=1;P44=0;
+   66   1        vTaskDelay(125);
+   67   1      }
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =        97     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

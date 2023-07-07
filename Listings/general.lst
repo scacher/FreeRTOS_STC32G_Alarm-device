@@ -1,0 +1,92 @@
+C251 COMPILER V5.60.0,  general                                                            07/07/23  15:38:06  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE general
+OBJECT MODULE PLACED IN .\Objects\general.obj
+COMPILER INVOKED BY: D:\Keil_v5\C251\BIN\C251.EXE Sources\Task\src\general.c XSMALL FUNCTIONS(REENTRANT) OPTIMIZE(4,SPEE
+                    -D) BROWSE INCDIR(.\Sources\User;.\Sources\User\include;.\Sources\FreeRTOS\include;.\Sources\FreeRTOS\portable\STC32G12K1
+                    -28;.\Sources\Driver\inc;.\Sources\Task\inc) DEBUG PRINT(.\Listings\general.lst) TABS(2) OBJECT(.\Objects\general.obj) 
+
+stmt  level    source
+
+    1          #include "FreeRTOS.h"
+    2          #include "task.h"
+    3          
+    4          #include "adckey.h"
+    5          #include "led.h"
+    6          //#include "ledC4Hz.h"
+    7          //#include "ledB4Hz.h"
+    8          #include "display.h"
+    9          #include "Power_detection.h"
+   10          #include "Infrared.h"
+   11          #include "DS18B20.h"
+   12          #include "general.h"
+   13          #include "oled.h"
+   14          #include "beep.h"
+   15          
+   16          #define normal_state 0
+   17          #define alarm_state  1 //报警状态
+   18          #define manage_state 2 //处理状态
+   19          
+   20          u8 general_mode=0;
+   21          
+   22          
+   23          portTASK_FUNCTION( vgeneralTask, pvParameters)
+   24          {
+   25   1        u8 led_delay=0;
+   26   1        UNUSED( pvParameters );
+   27   1      
+   28   1          while(1)
+   29   1          {
+   30   2            if(flag || flag1 || flag2)
+   31   2            {
+   32   3              general_mode=alarm_state;
+   33   3            }
+   34   2            if(ucKeyCode==1) //按下处理按键
+   35   2            {
+   36   3              ucKeyCode=0;
+   37   3              general_mode=manage_state ;
+   38   3            }
+   39   2            if((general_mode==alarm_state) && ucKeyCode==2 && (!flag && !flag1 && !flag2)) //ucKeyCode==2恢复按键
+   40   2            {
+   41   3              ucKeyCode=0;
+   42   3              general_mode=normal_state ;
+   43   3            }
+   44   2            switch(general_mode)
+   45   2            {
+   46   3              case  normal_state :  {pucLEDBuffer[0]=0; ledA1hz();break;}
+   47   3              case  alarm_state  :  {pucLEDBuffer[0]=1;ledB4hz();break;}
+   48   3              case  manage_state :  {pucLEDBuffer[0]=2;while(led_delay<10){ledB4C4hz();led_delay++;}led_delay=0;gen
+             -eral_mode=normal_state;break;}//处理时间(5s)到了之后自动回归初始状态
+   49   3            }
+   50   2      
+   51   2            vTaskDelay(5);
+   52   2          }
+   53   1          vTaskDelete(NULL);
+   54   1      }
+
+
+C251 COMPILER V5.60.0,  general                                                            07/07/23  15:38:06  PAGE 2   
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       156     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =         1     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =         5     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
